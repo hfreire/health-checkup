@@ -5,25 +5,26 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-const test = require('blue-tape')
 const Promise = require('bluebird')
+const test = require('blue-tape')
 
 test('run single health check', (t) => {
   t.plan(3)
 
-  const HealthCheckup = require('../src/health-checkup')
+  const Health = require('../src/health-checkup')
 
   const check = () => new Promise((resolve) => {
     t.pass('ran health check')
 
-    resolve()
+    return resolve()
   })
 
-  HealthCheckup.addCheck('check1', check)
+  Health.addCheck('check1', check)
 
-  return HealthCheckup.checkup()
-    .then(status => {
-      t.equal(status.length, 1, 'status report has only 1 check')
-      t.equal(status[ 0 ].name, 'check1', 'check has correct name')
+  return Health.checkup()
+    .then(report => {
+      t.equal(report.length, 1, 'health report has only 1 check')
+      t.equal(report[ 0 ].name, 'check1', 'check has correct name')
     })
 })
+

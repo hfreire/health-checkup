@@ -5,14 +5,17 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-const _ = require('lodash')
 const Promise = require('bluebird')
 const locks = require('locks')
 const memoize = require('memoizee')
 
 Promise.promisifyAll(locks)
 
-const defaultOptions = { cacheMaxAge: 10000, cachePreFetch: true }
+const defaultOptions = { cacheMaxAge: false, cachePreFetch: false }
+
+const isFunction = (obj) => {
+  return !!(obj && obj.constructor && obj.call && obj.apply)
+}
 
 class HealthCheckup {
   constructor () {
@@ -37,7 +40,7 @@ class HealthCheckup {
   }
 
   addCheck (name, fn, options = defaultOptions) {
-    if (!name || !fn || !_.isFunction(fn)) {
+    if (!name || !fn || !isFunction(fn)) {
       throw new TypeError()
     }
 
