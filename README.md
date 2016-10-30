@@ -60,6 +60,5 @@ Health.checkup()
 ```
 
 ### TODO
-* Reduce number of dependencies
 * Support callbacks
 
