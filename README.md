@@ -10,7 +10,7 @@
 
 ### Features
 * Support for [Bluebird](https://github.com/petkaantonov/bluebird) :bird: promises
-* Caches :clock10: check results
+* Cache :clock10: check results (able to set expiration time)
 
 ### How to install
 ```
