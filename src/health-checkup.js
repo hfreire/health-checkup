@@ -14,13 +14,13 @@ Promise.promisifyAll(locks)
 
 const defaultOptions = { cacheMaxAge: 10000, cachePreFetch: true }
 
-class Healthcheck {
+class HealthCheckup {
   constructor () {
     this._checks = []
     this._mutex = locks.createMutex()
   }
 
-  status () {
+  checkup () {
     return this._mutex.lockAsync()
       .then(() => Promise.map(this._checks, ({ name, check }) => {
         return check()
@@ -47,4 +47,4 @@ class Healthcheck {
   }
 }
 
-module.exports = new Healthcheck()
+module.exports = new HealthCheckup()

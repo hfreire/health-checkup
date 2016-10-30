@@ -11,7 +11,7 @@ const Promise = require('bluebird')
 test('run single health check', (t) => {
   t.plan(3)
 
-  const Healthcheck = require('../src/healthcheck')
+  const HealthCheckup = require('../src/health-checkup')
 
   const check = () => new Promise((resolve) => {
     t.pass('ran health check')
@@ -19,9 +19,9 @@ test('run single health check', (t) => {
     resolve()
   })
 
-  Healthcheck.addCheck('check1', check)
+  HealthCheckup.addCheck('check1', check)
 
-  return Healthcheck.status()
+  return HealthCheckup.checkup()
     .then(status => {
       t.equal(status.length, 1, 'status report has only 1 check')
       t.equal(status[ 0 ].name, 'check1', 'check has correct name')
