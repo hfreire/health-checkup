@@ -12,7 +12,7 @@ node install health-checkup
 ```
 
 ### How to use
-1. Set up health checks that should be performed during a checkup later on
+#### Set up health checks that should be performed during a checkup later on
 ```javascript
 const Health = require('health-checkup')
 
@@ -31,7 +31,7 @@ class MyService1 {
 }
 ```
 
-2. Perform a checkup and retrieve health report
+#### Perform a checkup and retrieve health report
 ```javascript
 Health.checkup()
   .then((report) => {
