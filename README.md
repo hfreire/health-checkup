@@ -7,8 +7,8 @@
 [![Downloads](https://img.shields.io/npm/dt/health-checkup.svg)](https://www.npmjs.com/package/health-checkup) 
 
 ### Features
-* Support for Bluebird promises
-* Caches check results
+* Support for [Bluebird](https://github.com/petkaantonov/bluebird) :bird: promises
+* Caches :clock10: check results
 
 ### How to install
 ```
