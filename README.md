@@ -6,6 +6,10 @@
 [![Dependency Status](https://img.shields.io/david/hfreire/health-checkup.svg?style=flat)](https://david-dm.org/hfreire/health-checkup)
 [![Downloads](https://img.shields.io/npm/dt/health-checkup.svg)](https://www.npmjs.com/package/health-checkup) 
 
+### Features
+* Support for Bluebird promises
+* Caches check results
+
 ### How to install
 ```
 node install health-checkup
@@ -54,4 +58,8 @@ Health.checkup()
 //  }
 //]  
 ```
+
+### TODO
+* Reduce number of dependencies
+* Support callbacks
 
