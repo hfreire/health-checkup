@@ -1,6 +1,7 @@
 # A NodeJS health :heart: check facility to check the status :+1::-1: of your modules
 [![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 [![Build Status](https://travis-ci.org/hfreire/health-checkup.svg?branch=master)](https://travis-ci.org/hfreire/health-checkup)
+[![codecov](https://codecov.io/gh/hfreire/health-checkup/branch/master/graph/badge.svg)](https://codecov.io/gh/hfreire/health-checkup)
 [![Dependency Status](https://img.shields.io/david/hfreire/health-checkup.svg?style=flat)](https://david-dm.org/hfreire/health-checkup)
 [![](https://img.shields.io/github/release/hfreire/health-checkup.svg)](https://github.com/hfreire/health-checkup/releases)
 [![](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
