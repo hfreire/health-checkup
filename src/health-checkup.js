@@ -31,6 +31,8 @@ class HealthCheckup {
             return { name, is_healthy: true }
           })
           .catch((error) => {
+            check.delete() // manual clean up since https://github.com/medikoo/memoizee#promise-returning-functions not quite working
+
             return { name, is_healthy: false, reason: error.message }
           })
       }))

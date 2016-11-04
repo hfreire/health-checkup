@@ -11,6 +11,7 @@ const test = require('blue-tape')
 test('should run health checkup with a healthy and unhealthy check', (t) => {
   t.plan(8)
 
+  delete require.cache[ require.resolve('../src/health-checkup') ]
   const Health = require('../src/health-checkup')
 
   const checks = []
@@ -47,6 +48,7 @@ test('should run health checkup with a healthy and unhealthy check', (t) => {
 test('should fail adding check when using invalid parameters', (t) => {
   t.plan(2)
 
+  delete require.cache[ require.resolve('../src/health-checkup') ]
   const Health = require('../src/health-checkup')
 
   const name = 'check'
@@ -65,5 +67,25 @@ test('should fail adding check when using invalid parameters', (t) => {
   }
 
   t.end()
+})
+
+test('should not cache failed check', (t) => {
+  t.plan(2)
+
+  delete require.cache[ require.resolve('../src/health-checkup') ]
+  const Health = require('../src/health-checkup')
+
+  const check = () => {
+    t.pass('ran unhealthy check')
+    return Promise.reject()
+  }
+
+  Health.addCheck('unhealthy check', check)
+
+  return Health.checkup()
+    .catch(() => {
+      return Health.checkup()
+        .catch(() => {})
+    })
 })
 
