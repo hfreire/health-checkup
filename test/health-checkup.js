@@ -69,7 +69,7 @@ test('should fail adding check when using invalid parameters', (t) => {
   t.end()
 })
 
-test('should not cache failed check', (t) => {
+test('should not cache unhealthy check', (t) => {
   t.plan(2)
 
   delete require.cache[ require.resolve('../src/health-checkup') ]
@@ -88,4 +88,40 @@ test('should not cache failed check', (t) => {
         .catch(() => {})
     })
 })
+
+test('should cache healthy check', (t) => {
+  t.plan(1)
+
+  delete require.cache[ require.resolve('../src/health-checkup') ]
+  const Health = require('../src/health-checkup')
+
+  const check = () => {
+    t.pass('ran healthy check')
+    return Promise.resolve()
+  }
+
+  Health.addCheck('healthy check', check)
+
+  return Health.checkup()
+    .then(() => Health.checkup())
+})
+
+test('should not cache healthy check after 150 ms', (t) => {
+  t.plan(2)
+
+  delete require.cache[ require.resolve('../src/health-checkup') ]
+  const Health = require('../src/health-checkup')
+
+  const check = () => {
+    t.pass('ran healthy check')
+    return Promise.resolve()
+  }
+
+  Health.addCheck('healthy check', check, { cacheMaxAge: 150 })
+
+  return Health.checkup()
+    .delay(150)
+    .then(() => Health.checkup())
+})
+
 

@@ -11,7 +11,7 @@ const memoize = require('memoizee')
 
 Promise.promisifyAll(locks)
 
-const defaultOptions = { cacheMaxAge: false, cachePreFetch: false }
+const defaultOptions = { cacheMaxAge: 1000, cachePreFetch: false }
 
 const isFunction = (obj) => {
   return !!(obj && obj.constructor && obj.call && obj.apply)
