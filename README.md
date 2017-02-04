@@ -9,8 +9,8 @@
 [![Downloads](https://img.shields.io/npm/dt/health-checkup.svg)](https://www.npmjs.com/package/health-checkup) 
 
 ### Features
-* Support for [Bluebird](https://github.com/petkaantonov/bluebird) :bird: promises
-* Cache :clock10: check results (able to set expiration time)
+* Support for [Bluebird](https://github.com/petkaantonov/bluebird) :bird: promises :white_check_mark:
+* Cache :clock10: check results (able to set expiration time) :white_check_mark:
 
 ### How to install
 ```
