@@ -19,24 +19,27 @@
     "locks": "^0.2.2",
     "memoizee": "^0.4.1"
   },
-  "scripts": {
-    "start": "node lib/index.js",
-    "test": "node_modules/.bin/eslint src && node ./test/health-checkup.js | tap-spec && npm run coverage",
-    "coverage": "./node_modules/.bin/istanbul cover --report lcovonly test/* && ./node_modules/.bin/codecov",
-    "clean": "rm -rf lib",
-    "compile": "mkdir -p lib && ./node_modules/.bin/babel -o lib/index.js src/health-checkup.js",
-    "prepublish": "npm run compile"
-  },
   "devDependencies": {
     "babel-cli": "^6.14.0",
     "babel-eslint": "^6.1.2",
     "babel-preset-es2015": "^6.14.0",
-    "codecov": "^1.0.1",
+    "coveralls": "^2.11.15",
     "eslint": "^3.5.0",
     "eslint-config-standard": "^6.0.1",
+    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-standard": "^2.0.0",
     "istanbul": "^0.4.5",
     "standard": "^8.1.0",
     "tap-spec": "^4.1.1",
     "tape": "^4.6.2"
+  },
+  "scripts": {
+    "lint": "node_modules/.bin/eslint .",
+    "coverage": "node_modules/.bin/istanbul cover --report lcovonly test/*",
+    "test": "node test/health-checkup.js | tap-spec && npm run coverage",
+    "clean": "rm -rf lib coverage",
+    "compile": "mkdir -p lib && ./node_modules/.bin/babel -o lib/index.js src/health-checkup.js",
+    "prepublish": "npm run compile",
+    "coveralls": "cat coverage/lcov.info | node_modules/.bin/coveralls"
   }
 }
