@@ -4,6 +4,7 @@
 [![Build Status](https://travis-ci.org/hfreire/health-checkup.svg?branch=master)](https://travis-ci.org/hfreire/health-checkup)
 [![Coverage Status](https://coveralls.io/repos/github/hfreire/health-checkup/badge.svg?branch=master)](https://coveralls.io/github/hfreire/health-checkup?branch=master)
 [![Dependency Status](https://img.shields.io/david/hfreire/health-checkup.svg?style=flat)](https://david-dm.org/hfreire/health-checkup)
+[![devDependencies Status](https://david-dm.org/hfreire/health-checkup/dev-status.svg)](https://david-dm.org/hfreire/health-checkup?type=dev)
 [![Greenkeeper badge](https://badges.greenkeeper.io/hfreire/health-checkup.svg)](https://greenkeeper.io/)
 [![](https://img.shields.io/github/release/hfreire/health-checkup.svg)](https://github.com/hfreire/health-checkup/releases)
 [![](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
