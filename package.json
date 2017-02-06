@@ -28,18 +28,19 @@
     "eslint-config-standard": "^6.0.1",
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^2.0.0",
+    "greenkeeper-postpublish": "^1.0.1",
     "istanbul": "^0.4.5",
     "standard": "^8.1.0",
     "tap-spec": "^4.1.1",
     "tape": "^4.6.2"
   },
   "scripts": {
-    "lint": "node_modules/.bin/eslint .",
-    "coverage": "node_modules/.bin/istanbul cover --report lcovonly test/*",
-    "test": "node test/health-checkup.js | tap-spec && npm run coverage",
     "clean": "rm -rf lib coverage",
+    "lint": "node_modules/.bin/eslint .",
+    "coverage": "node_modules/.bin/istanbul cover --include-all-sources ./node_modules/mocha/bin/_mocha -- --recursive test",
+    "test": "npm run lint && npm run coverage",
     "compile": "mkdir -p lib && ./node_modules/.bin/babel -o lib/index.js src/health-checkup.js",
     "prepublish": "npm run compile",
-    "coveralls": "cat coverage/lcov.info | node_modules/.bin/coveralls"
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
   }
 }
