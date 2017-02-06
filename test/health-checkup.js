@@ -5,123 +5,133 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-const Promise = require('bluebird')
-const test = require('blue-tape')
+describe('health-checkup', () => {
+  let subject
 
-test('should run health checkup with a healthy and unhealthy check', (t) => {
-  t.plan(8)
+  afterEach(() => {
+    td.reset()
 
-  delete require.cache[ require.resolve('../src/health-checkup') ]
-  const Health = require('../src/health-checkup')
-
-  const checks = []
-  checks.push({
-    name: 'healthy check',
-    check: () => new Promise((resolve) => {
-      t.pass('ran healthy check')
-
-      return resolve()
-    })
-  })
-  checks.push({
-    name: 'unhealthy check',
-    check: () => new Promise((resolve, reject) => {
-      t.pass('ran unhealthy check')
-
-      return reject(new Error('unhealthy by nature'))
-    })
+    delete require.cache[ require.resolve('../src/health-checkup') ]
   })
 
-  checks.forEach(({ name, check }) => Health.addCheck(name, check))
-
-  return Health.checkup()
-    .then(report => {
-      t.equal(report.length, 2, 'health report has only 1 check')
-      t.equal(report[ 0 ].name, 'healthy check', 'healthy check has correct name')
-      t.equal(report[ 0 ].is_healthy, true, 'healthy check has correct health')
-      t.equal(report[ 1 ].name, 'unhealthy check', 'healthy check has correct name')
-      t.equal(report[ 1 ].is_healthy, false, 'unhealthy check has correct health')
-      t.equal(report[ 1 ].reason, 'unhealthy by nature', 'unhealthy check has correct reason')
+  describe('when adding a check', () => {
+    before(() => {
+      subject = require('../src/health-checkup')
     })
-})
 
-test('should fail adding check when using invalid parameters', (t) => {
-  t.plan(2)
-
-  delete require.cache[ require.resolve('../src/health-checkup') ]
-  const Health = require('../src/health-checkup')
-
-  const name = 'check'
-  const check = () => Promise.resolve()
-
-  try {
-    Health.addCheck(name, null)
-  } catch (error) {
-    t.pass('failed when adding invalid check function')
-  }
-
-  try {
-    Health.addCheck(null, check)
-  } catch (error) {
-    t.pass('failed when adding invalid check name')
-  }
-
-  t.end()
-})
-
-test('should not cache unhealthy check', (t) => {
-  t.plan(2)
-
-  delete require.cache[ require.resolve('../src/health-checkup') ]
-  const Health = require('../src/health-checkup')
-
-  const check = () => {
-    t.pass('ran unhealthy check')
-    return Promise.reject()
-  }
-
-  Health.addCheck('unhealthy check', check)
-
-  return Health.checkup()
-    .catch(() => {
-      return Health.checkup()
-        .catch(() => {})
+    it('should fail if check function is invalid', () => {
+      try {
+        subject.addCheck('my-check', null)
+      } catch (error) {
+        error.should.be.an.instanceOf(TypeError)
+      }
     })
+
+    it('should fail if check name is invalid', () => {
+      const check = () => Promise.resolve()
+
+      try {
+        subject.addCheck(null, check)
+      } catch (error) {
+        error.should.be.an.instanceOf(TypeError)
+      }
+    })
+  })
+
+  describe('when having both a healthy and an unhealthy check', () => {
+    let healthyCheck
+    let unhealthyCheck
+    const error = new Error('my-error')
+
+    before(() => {
+      subject = require('../src/health-checkup')
+    })
+
+    beforeEach(() => {
+      healthyCheck = td.function()
+      unhealthyCheck = td.function()
+
+      td.when(healthyCheck()).thenResolve()
+      td.when(unhealthyCheck()).thenReject(error)
+    })
+
+    it('should resolve a report with two checks', () => {
+      const checks = []
+      checks.push({ name: 'my-healthy-check', check: healthyCheck })
+      checks.push({ name: 'my-unhealthy-check', check: unhealthyCheck })
+
+      checks.forEach(({ name, check }) => {
+        subject.addCheck(name, check)
+      })
+
+      return subject.checkup()
+        .then(report => {
+          report.should.have.lengthOf(2)
+          report[ 0 ].should.have.property('name', 'my-healthy-check')
+          report[ 0 ].should.have.property('is_healthy', true)
+          report[ 1 ].should.have.property('name', 'my-unhealthy-check')
+          report[ 1 ].should.have.property('is_healthy', false)
+          report[ 1 ].should.have.property('reason', error.message)
+        })
+    })
+  })
+
+  describe('when having an unhealthy check', () => {
+    before(() => {
+      subject = require('../src/health-checkup')
+    })
+
+    it('should not be cached', () => {
+      const error = new Error('my-error')
+      const check = td.function()
+
+      td.when(check()).thenReject(error)
+
+      subject.addCheck('my-check-name', check)
+
+      return subject.checkup()
+        .catch(() => {
+          return subject.checkup()
+            .catch(() => {
+              td.verify(check(), { times: 2 })
+            })
+        })
+    })
+  })
+
+  describe('when having a healthy check', () => {
+    let check
+
+    before(() => {
+      subject = require('../src/health-checkup')
+    })
+
+    beforeEach(() => {
+      check = td.function()
+      td.when(check()).thenResolve()
+    })
+
+    it('should be cached', () => {
+      subject.addCheck('my-check-name', check)
+
+      return subject.checkup()
+        .then(() => {
+          return subject.checkup()
+            .then(() => td.verify(check(), { times: 1 }))
+        })
+    })
+
+    it('should not be cached more than 10 ms', () => {
+      subject.addCheck('my-check-name', check, { cacheMaxAge: 10 })
+
+      return subject.checkup()
+        .delay(10)
+        .then(() => {
+          return subject.checkup()
+            .then(() => {
+              td.verify(check(), { times: 2 })
+            })
+        })
+    })
+  })
 })
-
-test('should cache healthy check', (t) => {
-  t.plan(1)
-
-  delete require.cache[ require.resolve('../src/health-checkup') ]
-  const Health = require('../src/health-checkup')
-
-  const check = () => {
-    t.pass('ran healthy check')
-    return Promise.resolve()
-  }
-
-  Health.addCheck('healthy check', check)
-
-  return Health.checkup()
-    .then(() => Health.checkup())
-})
-
-test('should not cache healthy check after 150 ms', (t) => {
-  t.plan(2)
-
-  delete require.cache[ require.resolve('../src/health-checkup') ]
-  const Health = require('../src/health-checkup')
-
-  const check = () => {
-    t.pass('ran healthy check')
-    return Promise.resolve()
-  }
-
-  Health.addCheck('healthy check', check, { cacheMaxAge: 150 })
-
-  return Health.checkup()
-    .delay(150)
-    .then(() => Health.checkup())
-})
-
-
