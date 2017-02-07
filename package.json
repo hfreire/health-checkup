@@ -52,7 +52,7 @@
     "compile": "mkdir -p lib && ./node_modules/.bin/babel -o lib/index.js src/health-checkup.js",
     "prepublish": "npm run compile",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
-    "semantic-release": "node_modules/.bin/semantic-release pre && npm publish && node_modules/.bin/semantic-release post",
+    "semantic-release": "./node_modules/.bin/semantic-release pre && npm publish && node_modules/.bin/semantic-release post",
     "commit": "./node_modules/.bin/commit-wizard"
   }
 }
