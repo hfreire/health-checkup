@@ -1,4 +1,4 @@
-# A NodeJS health :heart: check facility to check the status :+1::-1: of your modules
+# A health :heart: check facility to check the status :+1::-1: of your modules
 
 [![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 [![Build Status](https://travis-ci.org/hfreire/health-checkup.svg?branch=master)](https://travis-ci.org/hfreire/health-checkup)
@@ -8,6 +8,8 @@
 [![](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/npm/v/health-checkup.svg)](https://www.npmjs.com/package/health-checkup)
 [![Downloads](https://img.shields.io/npm/dt/health-checkup.svg)](https://www.npmjs.com/package/health-checkup) 
+
+One function to check the health status of all your app modules.
 
 ### Features
 * Cache :clock10: check results (able to set expiration time) :white_check_mark:
@@ -19,8 +21,10 @@ node install health-checkup
 ```
 
 ### How to use
-#### Set up health checks that should be performed during a checkup later on
+
+#### Use it in your app
 ```javascript
+// Set up health checks that should be performed during a checkup later on
 const Health = require('health-checkup')
 
 class MyService1 {
@@ -37,31 +41,10 @@ class MyService1 {
   }
 }
 ```
-
-#### Perform a checkup and retrieve health report
 ```javascript
+// Perform a checkup and retrieve health report
 Health.checkup()
   .then((report) => {
     console.log(report)
-  })
-  
-//[
-//  {
-//    "name": "MyService1",
-//    "is_healthy": true
-//  },
-// {
-//    "name": "MyService2",
-//    "is_healthy": true
-//  },
-//  {
-//    "name": "MyService3",
-//    "is_healthy": false,
-//    "reason": "Unable to reach remote server."
-//  }
-//]  
+  }) 
 ```
-
-### TODO
-* Support callbacks
-
