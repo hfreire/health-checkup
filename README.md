@@ -49,4 +49,4 @@ Health.checkup()
   }) 
 ```
 ### Used by
-*  [serverful - A kickass :muscle: web server :scream_cat: with all the bells :bell: and whistles :sparkles:](https://github.com/hfreire/serverful)
+*  [serverful](https://github.com/hfreire/serverful) - A kickass :muscle: web server :scream_cat: with all the bells :bell: and whistles :sparkles:
