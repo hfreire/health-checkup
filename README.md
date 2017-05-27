@@ -17,7 +17,7 @@ One function to check the health status of all your app modules.
 
 ### How to install
 ```
-node install health-checkup
+npm install health-checkup
 ```
 
 ### How to use
