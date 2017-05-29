@@ -14,7 +14,6 @@
   },
   "homepage": "https://github.com/hfreire/health-checkup#readme",
   "dependencies": {
-    "blue-tape": "1.0.0",
     "bluebird": "3.5.0",
     "locks": "0.2.2",
     "memoizee": "0.4.5"
