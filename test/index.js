@@ -16,7 +16,7 @@ describe('Module', () => {
     })
 
     it('should export health checkup', () => {
-      subject.should.be.equal(Health)
+      subject.should.be.eql(Health)
     })
   })
 })

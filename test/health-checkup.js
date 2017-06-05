@@ -15,7 +15,7 @@ describe('health-checkup', () => {
   })
 
   describe('when adding a check', () => {
-    before(() => {
+    beforeEach(() => {
       subject = require('../src/health-checkup')
     })
 
@@ -43,16 +43,14 @@ describe('health-checkup', () => {
     let unhealthyCheck
     const error = new Error('my-error')
 
-    before(() => {
-      subject = require('../src/health-checkup')
-    })
-
     beforeEach(() => {
       healthyCheck = td.function()
-      unhealthyCheck = td.function()
-
       td.when(healthyCheck()).thenResolve()
+
+      unhealthyCheck = td.function()
       td.when(unhealthyCheck()).thenReject(error)
+
+      subject = require('../src/health-checkup')
     })
 
     it('should resolve a report with two checks', () => {
@@ -77,7 +75,7 @@ describe('health-checkup', () => {
   })
 
   describe('when having an unhealthy check', () => {
-    before(() => {
+    beforeEach(() => {
       subject = require('../src/health-checkup')
     })
 
@@ -90,10 +88,12 @@ describe('health-checkup', () => {
       subject.addCheck('my-check-name', check)
 
       return subject.checkup()
-        .catch(() => {
+        .catch((_error) => {
+          _error.should.be.eql(error)
+
           return subject.checkup()
-            .catch(() => {
-              td.verify(check(), { times: 2 })
+            .catch((_error) => {
+              _error.should.be.eql(error)
             })
         })
     })
@@ -102,13 +102,11 @@ describe('health-checkup', () => {
   describe('when having a healthy check', () => {
     let check
 
-    before(() => {
-      subject = require('../src/health-checkup')
-    })
-
     beforeEach(() => {
       check = td.function()
       td.when(check()).thenResolve()
+
+      subject = require('../src/health-checkup')
     })
 
     it('should be cached', () => {
