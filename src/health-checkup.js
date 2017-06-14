@@ -23,7 +23,7 @@ class HealthCheckup {
     this._mutex = locks.createMutex()
   }
 
-  checkup () {
+  checkup() {
     return this._mutex.lockAsync()
       .then(() => Promise.map(this._checks, ({ name, check }) => {
         return check()
