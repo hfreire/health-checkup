@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, Hugo Freire <hugo@exec.sh>.
+ * Copyright (c) 2017, Hugo Freire <hugo@exec.sh>.
  *
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
@@ -28,7 +28,7 @@ describe('health-checkup', () => {
     })
 
     it('should fail if check name is invalid', () => {
-      const check = () => Promise.resolve()
+      const check = () => {}
 
       try {
         subject.addCheck(null, check)

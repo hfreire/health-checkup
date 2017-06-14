@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, Hugo Freire <hugo@exec.sh>.
+ * Copyright (c) 2017, Hugo Freire <hugo@exec.sh>.
  *
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
@@ -23,7 +23,7 @@ class HealthCheckup {
     this._mutex = locks.createMutex()
   }
 
-  checkup() {
+  checkup () {
     return this._mutex.lockAsync()
       .then(() => Promise.map(this._checks, ({ name, check }) => {
         return check()
