@@ -6,10 +6,10 @@
  */
 
 const Promise = require('bluebird')
-const locks = require('locks')
-const memoize = require('memoizee')
 
-Promise.promisifyAll(locks)
+const locks = Promise.promisifyAll(require('locks'))
+
+const memoize = require('memoizee')
 
 const defaultOptions = { cacheMaxAge: 1000, cachePreFetch: false }
 
