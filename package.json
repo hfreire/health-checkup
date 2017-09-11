@@ -16,7 +16,7 @@
   "dependencies": {
     "bluebird": "3.5.0",
     "locks": "0.2.2",
-    "memoizee": "0.4.10"
+    "memoizee": "0.4.11"
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
