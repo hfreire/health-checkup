@@ -17,7 +17,7 @@ const isFunction = (obj) => {
   return !!(obj && obj.constructor && obj.call && obj.apply)
 }
 
-class HealthCheckup {
+class Health {
   constructor () {
     this._checks = []
     this._mutex = locks.createMutex()
@@ -52,4 +52,4 @@ class HealthCheckup {
   }
 }
 
-module.exports = new HealthCheckup()
+module.exports = new Health()

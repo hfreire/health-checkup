@@ -5,18 +5,25 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-const Health = require('../src/health-checkup')
-
 describe('Module', () => {
   let subject
+  let Health
+
+  before(() => {
+    Health = td.object([])
+  })
+
+  afterEach(() => td.reset())
 
   describe('when loading', () => {
     beforeEach(() => {
+      td.replace('../src/health-checkup', Health)
+
       subject = require('../src/index')
     })
 
-    it('should export health checkup', () => {
-      subject.should.be.eql(Health)
+    it('should export health', () => {
+      subject.should.be.equal(Health)
     })
   })
 })
