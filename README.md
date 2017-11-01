@@ -27,17 +27,17 @@ Set up health checks that should be performed during a checkup later on
 ```javascript
 const Health = require('health-checkup')
 
-class MyService1 {
-  constructor() {
-    Health.addCheck('my-service1', () => new Promise((resolve, reject) => {
-      const status = this.getStatus()
+class MyService {
+  constructor () {
+    this._status = 'ok'
 
-      if (status !== 'ok') {
-        return reject(new Error(`My Service1 status is ${status}`))
-      } else {
-        return resolve()
-      }
-    }))
+    Health.addCheck('my-service', () => {
+      return Promise.try(() => {
+        if (this._status !== 'ok') {
+          throw new Error(`My Service status is ${this._status}`)
+        }
+      })
+    })
   }
 }
 ```
@@ -45,9 +45,7 @@ class MyService1 {
 Perform a checkup and retrieve health report
 ```javascript
 Health.checkup()
-  .then((report) => {
-    console.log(report)
-  }) 
+  .then((report) => console.log(report)) 
 ```
 
 ### Used by

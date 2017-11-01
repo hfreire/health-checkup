@@ -8,32 +8,38 @@
 describe('Health', () => {
   let subject
 
-  afterEach(() => {
-    td.reset()
-
-    delete require.cache[ require.resolve('../src/health-checkup') ]
-  })
+  afterEach(() => td.reset())
 
   describe('when adding a check', () => {
     beforeEach(() => {
       subject = require('../src/health-checkup')
     })
 
-    it('should fail if check function is invalid', () => {
+    afterEach(() => {
+      subject._checks = []
+    })
+
+    it('should fail if check function is invalid', (done) => {
       try {
         subject.addCheck('my-check', null)
       } catch (error) {
-        error.should.be.an.instanceOf(TypeError)
+        error.should.be.an.instanceOf(Error)
+        error.should.have.property('message', 'invalid arguments')
+
+        done()
       }
     })
 
-    it('should fail if check name is invalid', () => {
+    it('should fail if check name is invalid', (done) => {
       const check = () => {}
 
       try {
         subject.addCheck(null, check)
       } catch (error) {
-        error.should.be.an.instanceOf(TypeError)
+        error.should.be.an.instanceOf(Error)
+        error.should.have.property('message', 'invalid arguments')
+
+        done()
       }
     })
   })
@@ -43,25 +49,27 @@ describe('Health', () => {
     let unhealthyCheck
     const error = new Error('my-error')
 
-    beforeEach(() => {
+    before(() => {
       healthyCheck = td.function()
-      td.when(healthyCheck()).thenResolve()
 
       unhealthyCheck = td.function()
+    })
+
+    beforeEach(() => {
+      td.when(healthyCheck()).thenResolve()
+
       td.when(unhealthyCheck()).thenReject(error)
 
       subject = require('../src/health-checkup')
+      subject.addCheck('my-healthy-check', healthyCheck)
+      subject.addCheck('my-unhealthy-check', unhealthyCheck)
+    })
+
+    afterEach(() => {
+      subject._checks = []
     })
 
     it('should resolve a report with two checks', () => {
-      const checks = []
-      checks.push({ name: 'my-healthy-check', check: healthyCheck })
-      checks.push({ name: 'my-unhealthy-check', check: unhealthyCheck })
-
-      checks.forEach(({ name, check }) => {
-        subject.addCheck(name, check)
-      })
-
       return subject.checkup()
         .then(report => {
           report.should.have.lengthOf(2)
@@ -75,25 +83,32 @@ describe('Health', () => {
   })
 
   describe('when having an unhealthy check', () => {
+    const error = new Error('my-error')
+    let check
+
+    before(() => {
+      check = td.function()
+    })
+
     beforeEach(() => {
+      td.when(check()).thenReject(error)
+
       subject = require('../src/health-checkup')
+      subject.addCheck('my-check-name', check)
+    })
+
+    afterEach(() => {
+      subject._checks = []
     })
 
     it('should not be cached', () => {
-      const error = new Error('my-error')
-      const check = td.function()
-
-      td.when(check()).thenReject(error)
-
-      subject.addCheck('my-check-name', check)
-
       return subject.checkup()
         .catch((_error) => {
-          _error.should.be.eql(error)
+          _error.should.be.equal(error)
 
           return subject.checkup()
             .catch((_error) => {
-              _error.should.be.eql(error)
+              _error.should.be.equal(error)
             })
         })
     })
@@ -109,6 +124,10 @@ describe('Health', () => {
       subject = require('../src/health-checkup')
     })
 
+    afterEach(() => {
+      subject._checks = []
+    })
+
     it('should be cached', () => {
       subject.addCheck('my-check-name', check)
 
@@ -120,7 +139,7 @@ describe('Health', () => {
     })
 
     it('should not be cached more than 10 ms', () => {
-      subject.addCheck('my-check-name', check, { cacheMaxAge: 10 })
+      subject.addCheck('my-check-name', check, { memoizee: { maxAge: 10 } })
 
       return subject.checkup()
         .delay(10)

@@ -5,22 +5,31 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+const _ = require('lodash')
 const Promise = require('bluebird')
 
 const locks = Promise.promisifyAll(require('locks'))
 
 const memoize = require('memoizee')
 
-const defaultOptions = { cacheMaxAge: 1000, cachePreFetch: false }
-
-const isFunction = (obj) => {
-  return !!(obj && obj.constructor && obj.call && obj.apply)
+const defaultOptions = {
+  memoizee: {
+    maxAge: 1000,
+    prefetch: false
+  }
 }
 
 class Health {
-  constructor () {
+  constructor (options = {}) {
     this._checks = []
+
     this._mutex = locks.createMutex()
+
+    this.configure(options)
+  }
+
+  configure (options = {}) {
+    this._options = _.defaultsDeep(options, defaultOptions)
   }
 
   checkup () {
@@ -41,12 +50,12 @@ class Health {
       })
   }
 
-  addCheck (name, fn, options = defaultOptions) {
-    if (!name || !fn || !isFunction(fn)) {
-      throw new TypeError()
+  addCheck (name, fn, options = {}) {
+    if (!name || !fn || !_.isFunction(fn)) {
+      throw new Error('invalid arguments')
     }
 
-    const check = memoize(fn, { maxAge: options.cacheMaxAge, preFetch: options.cachePreFetch })
+    const check = memoize(fn, _.get(_.defaultsDeep(options, this._options), 'memoizee'))
 
     this._checks.push({ name, check })
   }
