@@ -9,7 +9,7 @@
 [![Version](https://img.shields.io/npm/v/health-checkup.svg)](https://www.npmjs.com/package/health-checkup)
 [![Downloads](https://img.shields.io/npm/dt/health-checkup.svg)](https://www.npmjs.com/package/health-checkup) 
 
-One function to check the health status of all your app modules.
+> One function to check the health status of all your app modules.
 
 ### Features
 * Cache :clock10: check results (able to set expiration time) :white_check_mark:
