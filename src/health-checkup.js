@@ -29,7 +29,7 @@ class Health {
   }
 
   configure (options = {}) {
-    this._options = _.defaultsDeep(options, defaultOptions)
+    this._options = _.defaultsDeep({}, options, defaultOptions)
   }
 
   checkup () {
