@@ -2,6 +2,9 @@
   "name": "health-checkup",
   "description": "A health check facility to check the status of your modules",
   "version": "0.0.0",
+  "engines": {
+    "node": ">= 6.0.0"
+  },
   "main": "lib/index.js",
   "repository": {
     "type": "git",
@@ -42,7 +45,8 @@
   },
   "config": {
     "pre-git": {
-      "commit-msg": "conventional"
+      "commit-msg": "conventional",
+      "allow-untracked-files": true
     }
   },
   "release": {
