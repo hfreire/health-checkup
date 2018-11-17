@@ -11,7 +11,7 @@ git clone https://github.com/my-github-username/health-checkup
 
 Change current directory
 ```
-cd get-me-date
+cd health-checkup
 ```
 
 Install NPM dependencies
