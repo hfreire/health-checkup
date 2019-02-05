@@ -19,7 +19,7 @@
   "dependencies": {
     "bluebird": "3.5.3",
     "locks": "0.2.2",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.11",
     "memoizee": "0.4.12"
   },
   "devDependencies": {
