@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/hfreire/health-checkup#readme",
   "dependencies": {
-    "bluebird": "3.7.0",
+    "bluebird": "3.7.1",
     "locks": "0.2.2",
     "lodash": "^4.17.4",
     "memoizee": "0.4.14"
