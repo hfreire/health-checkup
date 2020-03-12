@@ -1,6 +1,5 @@
 .idea
-*.iml
+lib
 coverage
 node_modules
-lib
-*.log
+*.iml
